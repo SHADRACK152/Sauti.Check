@@ -49,18 +49,28 @@ export function SautiChatbot({ isOpen, onToggle }: ChatbotProps) {
       setMessages(prev => [...prev, botMessage]);
     },
     onError: (error: any) => {
+      console.error('Chat error:', error);
+      let errorDescription = "Failed to get response from Sauti. Please try again.";
+      let errorMessage = "Sorry, I'm having trouble responding right now. Please try again later.";
+      
+      if (error.message === "Access token required" || error.status === 401) {
+        errorDescription = "Please log in to chat with Sauti";
+        errorMessage = "Please log in to your account to start chatting with me.";
+      }
+      
       toast({
         title: "Chat error",
-        description: "Failed to get response from Sauti. Please try again.",
+        description: errorDescription,
         variant: "destructive",
       });
-      const errorMessage: ChatMessage = {
+      
+      const botErrorMessage: ChatMessage = {
         id: `error-${Date.now()}`,
-        message: "Sorry, I'm having trouble responding right now. Please try again later.",
+        message: errorMessage,
         isBot: true,
         timestamp: new Date(),
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages(prev => [...prev, botErrorMessage]);
     },
   });
 
@@ -69,6 +79,14 @@ export function SautiChatbot({ isOpen, onToggle }: ChatbotProps) {
     if (!inputMessage.trim()) return;
 
     if (!auth.isAuthenticated()) {
+      const errorMessage: ChatMessage = {
+        id: `auth-error-${Date.now()}`,
+        message: "Please log in to your account to start chatting with me. You can register or login using the buttons in the navigation menu.",
+        isBot: true,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorMessage]);
+      
       toast({
         title: "Login required",
         description: "Please login to chat with Sauti",
