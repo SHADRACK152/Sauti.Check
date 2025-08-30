@@ -14,7 +14,7 @@ export default function JobsPage() {
   const { data: jobsData, isLoading } = useQuery<{ jobs: Job[] }>({
     queryKey: ['/api/jobs', selectedType || 'all'],
     queryFn: async () => {
-      const params = selectedType ? `?type=${selectedType}` : '';
+      const params = selectedType && selectedType !== 'all' ? `?type=${selectedType}` : '';
       const response = await fetch(`/api/jobs${params}`);
       return response.json();
     },
@@ -60,7 +60,7 @@ export default function JobsPage() {
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Types</SelectItem>
+                <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="full-time">Full Time</SelectItem>
                 <SelectItem value="part-time">Part Time</SelectItem>
                 <SelectItem value="contract">Contract</SelectItem>
