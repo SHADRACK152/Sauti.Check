@@ -1,0 +1,21 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="80" height="80" rx="20" fill="#2563EB"/>
+  <g filter="url(#shadow)">
+    <circle cx="40" cy="40" r="28" fill="#fff"/>
+    <!-- Speaker body -->
+    <rect x="28" y="32" width="12" height="16" rx="3" fill="#2563EB"/>
+    <!-- Speaker cone -->
+    <polygon points="40,40 52,32 52,48" fill="#2563EB"/>
+    <!-- Sound waves -->
+    <path d="M56 36c2 2 2 6 0 8" stroke="#2563EB" stroke-width="2" fill="none"/>
+    <path d="M60 34c3 3 3 10 0 13" stroke="#2563EB" stroke-width="2" fill="none"/>
+    <!-- Check mark -->
+    <polyline points="33,48 37,54 47,42" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="40" y="75" text-anchor="middle" fill="#2563EB" font-size="13" font-family="Arial" font-weight="bold">SautiCheck</text>
+  <defs>
+    <filter id="shadow" x="8" y="8" width="64" height="64" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+</svg>

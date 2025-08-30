@@ -44,6 +44,25 @@ export class MemStorage implements IStorage {
   }
 
   private seedData() {
+    // Seed default admin user if not present
+    const adminEmail = "admin@sauticheck.com";
+    if (!Array.from(this.users.values()).find(u => u.email === adminEmail)) {
+      const id = randomUUID();
+      this.users.set(id, {
+        id,
+        username: "admin",
+        email: adminEmail,
+        password: "$2b$10$mbTgI9Ke9PlA9LzSnBXyE.YDMtDpRVssEm4etuZSgnD/jJNNWHq6C", // hash for 'admin123'
+        firstName: "Admin",
+        lastName: "User",
+        location: "HQ",
+        role: "admin",
+        articlesRead: 0,
+        factsChecked: 0,
+        bookmarksCount: 0,
+        createdAt: new Date(),
+      });
+    }
     // Seed some initial data
     const sampleArticles: Article[] = [
       {

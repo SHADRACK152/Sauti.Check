@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { login } from "@/lib/auth";
 import { loginSchema, type LoginRequest } from "@shared/schema";
+import SautiCheckLogoAnimated from "@/components/SautiCheckLogoAnimated";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -26,12 +27,16 @@ export default function Login() {
   const onSubmit = async (data: LoginRequest) => {
     setIsLoading(true);
     try {
-      await login(data);
+      const res = await login(data);
       toast({
         title: "Login successful",
         description: "Welcome back to SautiCheck!",
       });
-      setLocation("/");
+      if (res.user.role === "admin") {
+        setLocation("/admin-dashboard");
+      } else {
+        setLocation("/");
+      }
     } catch (error: any) {
       toast({
         title: "Login failed",
@@ -44,22 +49,20 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-200 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-2xl border-0 rounded-3xl bg-white/90 backdrop-blur-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center">
-              <i className="fas fa-newspaper text-white text-2xl"></i>
-            </div>
+            <SautiCheckLogoAnimated className="w-20 h-20 drop-shadow-lg animate-fade-in" />
           </div>
-          <CardTitle className="text-2xl">Welcome Back</CardTitle>
-          <CardDescription>
-            Sign in to your SautiCheck account to continue
+          <CardTitle className="text-3xl font-extrabold text-blue-700 tracking-tight">Welcome Back</CardTitle>
+          <CardDescription className="text-base text-gray-500 mt-2">
+            Sign in to your <span className="font-semibold text-blue-600">SautiCheck</span> account to continue
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
                 name="email"
@@ -100,13 +103,13 @@ export default function Login() {
 
               <Button 
                 type="submit" 
-                className="w-full bg-primary hover:bg-primary/90"
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white font-bold py-2 rounded-xl shadow-md transition-all duration-200"
                 disabled={isLoading}
                 data-testid="button-login"
               >
                 {isLoading ? (
                   <>
-                    <i className="fas fa-spinner fa-spin mr-2"></i>
+                    <svg className="animate-spin h-5 w-5 mr-2 inline-block text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
                     Signing in...
                   </>
                 ) : (
@@ -114,12 +117,11 @@ export default function Login() {
                 )}
               </Button>
             </form>
-          </Form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              Don't have an account?{" "}
-              <Link href="/register" className="text-primary hover:underline" data-testid="link-register">
+          <div className="mt-8 text-center">
+            <p className="text-sm text-gray-500">
+              Don't have an account?{' '}
+              <Link href="/register" className="text-blue-600 font-semibold hover:underline" data-testid="link-register">
                 Sign up here
               </Link>
             </p>
