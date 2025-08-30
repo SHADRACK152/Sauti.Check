@@ -14,7 +14,7 @@ export default function Home() {
   const { data: articlesData, isLoading: articlesLoading } = useQuery<{ articles: Article[] }>({
     queryKey: ['/api/articles', selectedCategory || 'all'],
     queryFn: async () => {
-      const params = selectedCategory ? `?category=${selectedCategory}` : '';
+      const params = selectedCategory && selectedCategory !== 'all' ? `?category=${selectedCategory}` : '';
       const response = await fetch(`/api/articles${params}`);
       return response.json();
     },
@@ -58,7 +58,7 @@ export default function Home() {
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Categories</SelectItem>
+                  <SelectItem value="all">All Categories</SelectItem>
                   <SelectItem value="Politics">Politics</SelectItem>
                   <SelectItem value="Economy">Economy</SelectItem>
                   <SelectItem value="Education">Education</SelectItem>
@@ -142,13 +142,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Floating Action Button */}
-      <Button 
-        className="floating-action fixed bottom-20 right-4 md:bottom-6 md:right-6 w-14 h-14 bg-accent text-accent-foreground rounded-full hover:bg-accent/90 z-30 p-0"
-        data-testid="button-floating-fact-check"
-      >
-        <i className="fas fa-shield-alt text-xl"></i>
-      </Button>
     </div>
   );
 }

@@ -55,6 +55,54 @@ const mockFactChecker = (text: string) => {
   return { result, confidence, explanation };
 };
 
+// Mock AI chatbot response generator
+const generateChatbotResponse = (message: string) => {
+  const lowerMessage = message.toLowerCase();
+  
+  // Greetings
+  if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hujambo')) {
+    return "Hujambo! I'm Sauti, your civic assistant. I can help you with fact-checking, civic information, voting procedures, government services, and navigating this platform. What would you like to know?";
+  }
+  
+  // Fact-checking queries
+  if (lowerMessage.includes('fact check') || lowerMessage.includes('verify') || lowerMessage.includes('true') || lowerMessage.includes('false')) {
+    return "I can help you verify information! You can use our fact-checking tool on this platform, or ask me specific questions about claims you've heard. For the most accurate results, please provide the specific claim you'd like me to analyze.";
+  }
+  
+  // Voting information
+  if (lowerMessage.includes('vote') || lowerMessage.includes('election') || lowerMessage.includes('iebc')) {
+    return "For voting information in Kenya, you can register with IEBC (Independent Electoral and Boundaries Commission). Check our civic alerts section for current registration deadlines and polling station information. You need a valid national ID and must be 18 or older to register.";
+  }
+  
+  // Government services
+  if (lowerMessage.includes('government') || lowerMessage.includes('service') || lowerMessage.includes('permit') || lowerMessage.includes('license')) {
+    return "For government services in Kenya, you can visit eCitizen portal online or local Huduma Centers. Common services include permits, licenses, certificates, and tax services. Check our jobs section for current government opportunities too.";
+  }
+  
+  // Platform navigation
+  if (lowerMessage.includes('how') || lowerMessage.includes('navigate') || lowerMessage.includes('use')) {
+    return "I can guide you through SautiCheck! We have: News Feed (latest verified civic news), Fact Checker (verify claims), Civic Alerts (important announcements), Jobs Hub (employment opportunities), and Bookmarks (save articles). What specific feature would you like help with?";
+  }
+  
+  // News and information
+  if (lowerMessage.includes('news') || lowerMessage.includes('information') || lowerMessage.includes('update')) {
+    return "Stay informed with our verified news feed! We cover Politics, Economy, Education, Health, and Infrastructure. All articles are fact-checked and sourced from reliable media outlets. You can filter by category or bookmark articles for later reading.";
+  }
+  
+  // Jobs
+  if (lowerMessage.includes('job') || lowerMessage.includes('employment') || lowerMessage.includes('work') || lowerMessage.includes('career')) {
+    return "Check our Jobs Hub for verified employment opportunities from trusted organizations like Safaricom, Equity Bank, and government agencies. We offer full-time, part-time, contract, and internship positions across Kenya.";
+  }
+  
+  // Civic engagement
+  if (lowerMessage.includes('civic') || lowerMessage.includes('participate') || lowerMessage.includes('community')) {
+    return "Great to hear you want to engage civically! Check our Civic Alerts for public participation opportunities, budget hearings, and community meetings. Stay informed through our news feed and always verify information before sharing.";
+  }
+  
+  // Default response
+  return "I'm here to help with civic information, fact-checking, and navigating SautiCheck. You can ask me about voting procedures, government services, news verification, or how to use different features of this platform. What specific topic interests you?";
+};
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   app.post("/api/auth/register", async (req, res) => {
@@ -293,6 +341,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json({ job });
     } catch (error) {
       res.status(500).json({ message: "Failed to create job" });
+    }
+  });
+
+  // Sauti Chatbot route
+  app.post("/api/chat", authenticateToken, async (req: any, res) => {
+    try {
+      const { message } = req.body;
+      
+      if (!message || typeof message !== 'string') {
+        return res.status(400).json({ message: "Message is required" });
+      }
+
+      // Mock AI chatbot responses (replace with actual AI service integration)
+      const response = generateChatbotResponse(message);
+      
+      res.json({ response });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to process chat message" });
     }
   });
 
